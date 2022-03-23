@@ -1,0 +1,215 @@
+Süleyman Çetiner : 
+
+
+
+def build_model (learn_rate):
+
+ ## Modelimiz ne buna karar vercez.
+	model = tf.keras.models.Conv2D()
+
+ ## LAYER EKLEME 
+   
+    model.add = (tf.keras.layers.Dense(units=1;input_shape=(1,)))
+
+    ##Bütün bu layerleri ekledikten sonra optimizerimiz neyse ve metrics neyse ona göre belirleyip yukardaki learning rate değişkenini kullanarak lossla beraber derleriz.
+
+     model.compile(optimizer = tf.keras.optimizers.RMSprop(lr=learn_rate),loss = "mean_average_error",
+metrics=[tf.keras.metrics.MeanAverageError()])
+
+  return model
+
+
+def trainin_model(model,dataframe,features,labels,epoch_time,mini_batch_size=None
+     validations_split=0.1):
+
+## Model training yapak için sırasıyla :
+
+- Modelimiz
+- Modelimizi kullanacağımız bi veri seti,
+- Modelde tahmin edeceğimiz bir y yani predicted class label,
+- Batch size ve bu batch sizeın ayırdığı örnekleri modelden kaç kere geçireceğini belirlemesi için bir belirli sayı yani epoch time,
+- Ve modelin daha iyi olması için bir validation split 
+
+history = model.fit(x=df[features],y=dataframe[labels],
+			  batch_size = mini_batch_size,
+                    epochs = epoch_time,
+  			  validation_split=validations_split)
+
+
+## Modelin ağırlık ve biasını almak için basit bi yöntem :
+
+trained_weight = model.get_weights()[0]
+trained_bias = model.get_weights()[1]
+
+## Epoch sayısı ve epochun error ve accuracy gibi metriclerle olan ilişkisini göstermek için history modülünü kullanırız.
+
+epochs= history.epoch
+
+hist=pd.DataFrame.(history=.history)
+
+mae= hist["Mean Average Error"]
+
+return epochs,mae,history.history
+
+
+
+print("Defined the build_model and train_model functions.")
+
+## Tüm bu işlemlerden sonra loss vs epoch olarak bi eksende loss diğerinde epoch olacak şekilde çizgi grafiği çizeriz.
+
+
+
+def loss_curveunu_çizme(epochlar,mae_train,_mae_valid):
+
+plt.figure()
+plt.xlabel("Epoch")
+plt.ylabel("Mean Average Error")
+
+##x ve y eksenindeki parametrelerin yeri değişebilirdi birşey farketmezdi.
+
+plt.plot(epochlar[1:],mae_train[1:],label = "Training Loss")
+plt.plot(epochlar[1:],mae_valid[1:],label = "Validation Loss")
+
+"""Legend = Grafikteki bilgi veren bir araç""" 
+plt.legend()
+
+## Bu kodları tensorflowdan aldım ve orada ilk epoch çok yüksek olduğu için onu eklemeden grafiği çizeceğini söylemiş.Arrayi 0 dan başlatırsak ilk epochu da almış oluruz ki aslında önemli.
+
+merged_mae_list= mae_training[1:] + mae_validation[1:]
+high_loss = max(merged_mae_list)
+low_loss= min(merged_mae_list)
+
+"""Mantıken en yüksek için max (), en düşük için min fonksiyonunu kullanarak bu bütün hataların en yüksek ve en düşüğünü bulduk ve farkı da delta oldu.
+"""
+
+delta = high_loss - low_loss
+print(delta)
+
+""" Burda  deltayı 0.05 ile çarpmış.Ben 0.10 ile çarptım.
+
+y_axis = high_loss + (delta*0.10)
+x_axis = low_loss + (delta*0.10)
+
+plt,ylim([y_axis,_x_axis)]
+
+plt.show()
+
+print ( "Loss curve fonksiyonu oluşturduk.")
+
+"""
+Buraya kadar olan kısımda sadece benzer isimde variable kullanarak ve bazı parameterleri ve ayrıca loss functionu değiştirerek model oluşturup train etmeyi gösterdim.
+"""
+### Burası Task 1 
+
+""" Bildiğiniz gibi train data test data ve validation data belki biraz benzer olabilir ama aynısı olamaz ve test data, train datalarıyla eğtilmez.Validation dataları da aynı şekilde eğitilmez.Bu yüzden loss grafikleri farklı olmalıdır ki taskte bundan bahsediyor.Bu yüzden validation split kullanırız.Ve burada training seti böleriz.
+"""
+learn_rate= 0.08
+epochs = 30 
+batch_size = 100 
+
+
+validation_split = 0.2
+
+## Feature ve tahmin edilecek olan labeli yazarız.
+
+my_feature= "median_income"
+my_label = "median_house_value"
+
+## Önceki modeli yok ediyoruz çünkü  yeni modelle birlikte bu validation setini ayırmanın farkını daha iyi anlayabiliriz.
+
+my_model = None
+
+my_model = build_model(learn_rate)
+
+epochs,mae,history = trainin_model(my_model,train_dataframe,my_feature,my_label,
+		  epochs,batch_size,validation_split)
+
+
+loss_curveunu_çizme(epochlar,history["Mean_Average_Error"],
+  		       history["Val_Mean_Average_Error"]
+		  
+
+##Burası Task 2 
+## Randint ile belki rastgele bir sayı verilebilirdi.
+n = 50
+
+train_df.head(n)
+
+##Task 3 
+""" Burada datayı shuffle ederek train_df dediğimiz parametre yerine shuffled_df olarak kullanmamızı istiyor diğer her şey aynı.
+
+shuffled_df = train_dataframe.reindex(np.random.permutation(train_dataframe.index))
+
+epochs,mae,history = trainin_model(my_model,shuffled_df,my_feature,my_label,
+					     epochs,batch_size,validation_split)
+
+----- Yukarının Aynısı ------------
+# The following variables are the hyperparameters.
+learning_rate = 0.08
+epochs = 70
+batch_size = 100
+
+# Split the original training set into a reduced training set and a
+# validation set. 
+validation_split = 0.2
+
+# Identify the feature and the label.
+my_feature = "median_income"    # the median income on a specific city block.
+my_label = "median_house_value" # the median house value on a specific city block.
+# That is, you're going to create a model that predicts house value based 
+# solely on the neighborhood's median income.  
+
+# Discard any pre-existing version of the model.
+my_model = None
+
+# Shuffle the examples.
+shuffled_train_df = train_df.reindex(np.random.permutation(train_df.index)) 
+
+# Invoke the functions to build and train the model. Train on the shuffled
+# training set.
+my_model = build_model(learning_rate)
+epochs, rmse, history = train_model(my_model, shuffled_train_df, my_feature, 
+                                    my_label, epochs, batch_size, 
+                                    validation_split)
+
+plot_the_loss_curve(epochs, history["root_mean_squared_error"], 
+                    history["val_root_mean_squared_error"])
+
+---------- xxxxxx ----------------------------
+
+
+## Burada amaç shuffleın önemini anlatmak yoksa değişen bir şey yok.
+
+Sorulan Sorunun :
+
+1. Cevabı - Evet çünkü shuffle ediliyor yani data karıştırılıp ilk kez eğitiliyormuş gibi biraz daha loss yüksek olur ama güvenilir olur.
+
+2. Cevabı - 0.15 ten küçükse diverge eder yani uzaksar çünkü yeterine örnek yoktur.
+
+
+##Training setin içinden validation set çıkarılır ve eğitilir.Bu validation set ise daha sonra test set ise kontrol edilir.Böylece modelin gücü ve kalitesi kontrol edilir.
+--- Task 4 
+
+x_test = test_df[my_feature]
+y_test = test_df[my_label]
+
+results = my_model.evaluate(x_test, y_test, batch_size=batch_size)
+
+
+-- Sorunun cevabı : Evet yakın olur hatta ben mae ile yaptığım için daha da yakın olur.
+
+## Rmse ile yapmak daha etkilidir ki zaten yukarıda bahsettim.
+
+
+
+------------------- BİLGİ ----------------------
+
+
+### Bu not defterinde öncelikle kendim, daha sonra buradan yararlanmak isteyen insanlar için GOOGLE AI Machine Learning Crash Course Örneğini anlatarak yaptım.
+Her ne kadar bilinen ve temel kavramlar olsa da,kod üzerinde görmek ve kod becerimi geliştirmek istedim ve benim için yararlı oldu.Umarım bir şeylerde yardımcı olmuştur.Herhangi bir typo veya basit bir hata için kusura bakmayın.
+İyi çalışmalar....
+
+
+
+
+
