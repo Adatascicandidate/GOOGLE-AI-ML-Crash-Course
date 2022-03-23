@@ -7,7 +7,8 @@ Benim için gayet yararlı ve önemli bir çalışmaydı bu yüzden burada da pa
 İyi günler..
 
 
-[GOOGLE AI MACHINE LEARNING COURSE NOTES.txt](https://github.com/Adatascicandidate/GOOGLE-AI-ML-Crash-Course/files/8336162/GOOGLE.AI.MACHINE.LEARNING.COURSE.NOTES.txt)
+![Loss Function](https://user-images.githubusercontent.com/38746955/159784901-8ad054ec-9a1b-4e67-a0bf-1aa59584e844.png)
+
 
 
 Loss Function Graph
