@@ -11,4 +11,4 @@ Benim için gayet yararlı ve önemli bir çalışmaydı bu yüzden burada da pa
 
 
 
-Loss Function Graph
+Figure : Loss Function Graph
