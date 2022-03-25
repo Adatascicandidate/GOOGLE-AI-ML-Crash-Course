@@ -1,11 +1,35 @@
 Süleyman Çetiner : 
 
+##Dataset indirme ve okuma 
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from matplotlib import pyplot as plt
+
+pd.options.display.max_rows = 10
+pd.options.display.float_format = "{:.1f}".format
 
 
+train_df = pd.read_csv("https://download.mlcc.google.com/mledu-datasets/california_housing_train.csv")
+test_df = pd.read_csv("https://download.mlcc.google.com/mledu-datasets/california_housing_test.csv")
+
+
+
+## Burada bizim tek bir tane featuremiz var ama bu multi de olabilir.
+
+scale_factor = 1000.0
+
+# Scale the training set's label.
+train_df["median_house_value"] /= scale_factor 
+
+# Scale the test set's label
+test_df["median_house_value"] /= scale_factor
 def build_model (learn_rate):
 
  ## Modelimiz ne buna karar vercez.
 	model = tf.keras.models.Conv2D()
+	
+	
 
  ## LAYER EKLEME 
    
